@@ -1,24 +1,64 @@
 package com.project.shoppingbuddy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-
-import java.io.IOException;
+import java.util.ArrayList;
 
 public class combustiveisActivity extends AppCompatActivity {
 
-    private Button btnProcurar;
-    private TextView result;
+    private final Handler uiHandler = new Handler();
+    private Supermercado supermercado;
+    //private ArrayAdapter<String> adapter;
+    private SupermercadosAdapter supermercadosAdapter;
+    private ProgressDialog progressDialog;
+    private RecyclerView recyclerView;
+    private ArrayList<Supermercado> supermercadosList = new ArrayList<>();
+
+
+    private class JSHtmlInterface {
+        @android.webkit.JavascriptInterface
+        public void showHTML(String html) {
+            final String htmlContent = html;
+
+            uiHandler.post(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            Document doc = Jsoup.parse(htmlContent);
+                            Elements elements = doc.select("div.name, div.price:nth-of-type(1) div.encoded");
+                            supermercadosList.clear();
+                            for (Element element : elements) {
+                                supermercado = new Supermercado();
+                                String[] divName = element.select("div.name").text().split("Actualizado");
+                                String name = divName[0];
+                                supermercado.setName(name);
+                                String price = element.select("div.encoded").text();
+                                supermercado.setPreço(price);
+
+                                supermercadosList.add(supermercado);
+                            }
+                            supermercadosAdapter.notifyDataSetChanged();
+                        }
+                    }
+            );
+        }
+    }
 
 
     @Override
@@ -26,69 +66,55 @@ public class combustiveisActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_combustiveis);
 
-        btnProcurar = findViewById(R.id.btnGetCombustiveis);
-        result = findViewById(R.id.result);
 
+        recyclerView = findViewById(R.id.recycler);
 
-        btnProcurar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getContent();
-            }
-        });
-    }
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
+        supermercadosAdapter = new SupermercadosAdapter(this,supermercadosList);
+        recyclerView.setAdapter(supermercadosAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
 
-    public void getContent(){
+        progressDialog = ProgressDialog.show(this, "Loading","Please wait...", true);
+        progressDialog.setCancelable(true);
 
+        try {
+            final WebView browser = new WebView(this);
+            browser.setVisibility(View.INVISIBLE);
+            browser.setLayerType(View.LAYER_TYPE_NONE,null);
+            browser.getSettings().setJavaScriptEnabled(true);
+            browser.getSettings().setBlockNetworkImage(true);
+            browser.getSettings().setDomStorageEnabled(false);
+            browser.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+            browser.getSettings().setLoadsImagesAutomatically(false);
+            browser.getSettings().setGeolocationEnabled(false);
+            browser.getSettings().setSupportZoom(false);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+            browser.addJavascriptInterface(new JSHtmlInterface(), "JSBridge");
 
-                final StringBuilder builder = new StringBuilder();
+            browser.setWebViewClient(
+                    new WebViewClient() {
 
-                try {
-                    Document doc = Jsoup.connect("https://www.maisgasolina.com/combustivel-mais-barato/santarem/santarem/sc95/todos/").get();
+                        @Override
+                        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                            progressDialog.show();
+                            super.onPageStarted(view, url, favicon);
+                        }
 
-                    //Lista dos postos class=box id=stationList
-                    Elements lista = doc.select("#stationList");
-
-                    //Selecionar o div de cada posto
-                    Elements links = lista.select("a[href]");
-
-                    //Elements test = doc.select("a:nth-of-type(1) .price > div.encoded");
-
-                    //Iterar postos e extrair so o nome
-                    for (Element link : links){
-                        String[] divName = link.select("div.name").text().split("Actualizado");
-                        String name = divName[0];
-
-                        //Elements divPrices = link.select("a:nth-of-type(1) .price > div.encoded");
-
-                        String preço = "";
-
-
-                        builder.append("Posto: " + name + "\t Preço: " + preço).append("\n");
+                        @Override
+                        public void onPageFinished(WebView view, String url) {
+                            browser.loadUrl("javascript:window.JSBridge.showHTML('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
+                            progressDialog.dismiss();
+                        }
                     }
+            );
 
+            browser.loadUrl("https://www.maisgasolina.com/combustivel-mais-barato/santarem/santarem/sc95plus/todos/");
+            if(getSupportActionBar()!=null) getSupportActionBar().setTitle(browser.getUrl());
 
-
-                }catch (IOException e){
-                    builder.append("Erro: ").append(e.getMessage()).append("\n");
-                }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        result.setText(builder.toString());
-                    }
-                });
-
-            }
-        }).start();
-
-
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
 }
