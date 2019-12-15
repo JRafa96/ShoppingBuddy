@@ -13,6 +13,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.project.shoppingbuddy.helper.SQLiteHandler;
+import com.project.shoppingbuddy.helper.SessionManager;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -29,7 +32,6 @@ public class combustiveisActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private RecyclerView recyclerView;
     private ArrayList<Supermercado> supermercadosList = new ArrayList<>();
-
 
     private class JSHtmlInterface {
         @android.webkit.JavascriptInterface
@@ -65,7 +67,6 @@ public class combustiveisActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_combustiveis);
-
 
         recyclerView = findViewById(R.id.recycler);
 

@@ -49,8 +49,8 @@ public class SupermercadosAdapter extends RecyclerView.Adapter<SupermercadosAdap
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            nome = (TextView) itemView.findViewById(R.id.nome);
-            preço = (TextView) itemView.findViewById(R.id.preço);
+            nome = itemView.findViewById(R.id.nome);
+            preço = itemView.findViewById(R.id.preço);
 
         }
 
