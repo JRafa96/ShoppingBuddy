@@ -9,12 +9,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:gravity="center"
         android:background="#f1cc7e"
-        android:textSize="30sp"
-        android:textColor="#000"
+        android:gravity="center"
         android:text="Combustiveis"
-        />
+        android:textColor="#000"
+        android:textSize="30sp" />
 
 
     <LinearLayout
@@ -40,6 +39,15 @@
             android:gravity="center"
             android:layout_weight="1"
             android:text="Preço"/>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:layout_weight="1"
+            android:text="Distância"
+            android:textSize="20sp" />
 
     </LinearLayout>
 

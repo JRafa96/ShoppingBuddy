@@ -20,6 +20,7 @@ public class MainActivity extends Activity {
     private TextView txtEmail;
     private Button btnLogout;
     private Button btnComb;
+    private Button btnList;
 
     private SQLiteHandler db;
     private SessionManager session;
@@ -33,6 +34,7 @@ public class MainActivity extends Activity {
         txtEmail = (TextView) findViewById(R.id.email);
         btnLogout = (Button) findViewById(R.id.btnLogout);
         btnComb = findViewById(R.id.btnCombustiveis);
+        btnList = findViewById(R.id.btnListaCompras);
 
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
@@ -73,6 +75,17 @@ public class MainActivity extends Activity {
                 finish();
             }
         });
+
+        btnList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent j = new Intent(getApplicationContext(),
+                        ListaComprasActivity.class);
+                startActivity(j);
+                finish();
+            }
+        });
+
     }
 
     /**
