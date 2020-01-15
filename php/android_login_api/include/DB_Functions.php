@@ -108,4 +108,41 @@ class DB_Functions
 
         return $hash;
     }
+
+    public function getProdutos($produtos){
+        $stmt = $this->conn->prepare("SELECT * FROM produtos WHERE name = ? ");
+
+        $stmt->bind_param("s", $produtos);
+        
+        $listaproduts=$stmt->execute();
+
+        $listaresult=array();
+        while($row=$listaproduts->fetch()){
+            $linha=array('id'=> $row['id'],'name'=>$row['name'],'price'=>$row['price']);
+            array_push($listaresult,$linha);
+        }
+
+        return $listaresult;
+
+
+    }
+
+    public function getSupermercados($supermercados){
+        $stmt = $this->conn->prepare("SELECT * FROM supermercados WHERE name = ? ");
+
+        $stmt->bind_param("s", $supermercados);
+
+        $stmt->execute();
+
+        $listasuper=$stmt->execute();
+
+        $listaresult=array();
+        while($row=$listasuper->fetch()){
+            $linha=array('id'=> $row['id'],'name'=>$row['name'],'latitude'=>$row['latitude'],'longitude'=>$row['longitude']);
+            array_push($listaresult,$linha);
+        }
+
+        return $listaresult;
+    }
+    
 }
