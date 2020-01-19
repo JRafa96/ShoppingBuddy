@@ -4,39 +4,63 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/backgroud_grad"
+    >
+
 
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:background="@color/btn_logut_bg"
+        android:background="@drawable/btn_shape"
         android:text="@string/btn_logout"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCombustiveis" />
+        app:layout_constraintTop_toBottomOf="@+id/btnCombustiveis"
+        app:layout_constraintVertical_bias="0.931" />
 
     <Button
         android:id="@+id/btnCombustiveis"
         style="@android:style/Widget.Holo.Light.Button"
-        android:layout_width="218dp"
-        android:layout_height="27dp"
-        android:layout_marginStart="162dp"
-        android:layout_marginTop="200dp"
-        android:layout_marginEnd="162dp"
-        android:layout_marginBottom="200dp"
-        android:background="@color/btn_comb"
+        android:layout_width="220dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="173dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/btn_shape"
         android:text="Combustiveis"
         android:textSize="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnLogout"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btnListaCompras"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <Button
+        android:id="@+id/btnListaCompras"
+        style="@android:style/Widget.Holo.Light.Button"
+        android:layout_width="220dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="150dp"
+        android:background="@drawable/btn_shape"
+        android:text="Lista de Compras"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnCombustiveis" />
 
     <LinearLayout
         android:id="@+id/linearLayout"

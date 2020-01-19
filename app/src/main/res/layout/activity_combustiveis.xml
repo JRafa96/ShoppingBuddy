@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".combustiveisActivity">
+    tools:context=".combustiveisActivity"
+    android:background="@drawable/backgroud_grad">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:background="@drawable/backgroud_grad"
         android:gravity="center"
-        android:background="#f1cc7e"
-        android:textSize="30sp"
-        android:textColor="#000"
         android:text="Combustiveis"
+        android:textColor="#000"
+        android:textSize="30sp"
         />
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"/>
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#2d1ed4"
+        android:background="#CFCFCF"
+        android:textStyle="bold"
         android:orientation="horizontal">
 
         <TextView
@@ -30,7 +40,8 @@
             android:textSize="20sp"
             android:gravity="center"
             android:layout_weight="2"
-            android:text="Posto"/>
+            android:text="Posto"
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_width="0dp"
@@ -39,17 +50,39 @@
             android:textSize="20sp"
             android:gravity="center"
             android:layout_weight="1"
-            android:text="Preço"/>
+            android:text="Preço"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:layout_weight="1"
+            android:text="Distância"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
 
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="20dp"
-        android:id="@+id/recycler">
+        android:layout_height="492dp"
+        android:layout_marginBottom="0dp"
+        android:layout_weight="2"
+        android:background="@drawable/backgroud_grad">
 
     </androidx.recyclerview.widget.RecyclerView>
 
+    <Button
+        android:id="@+id/btn_Maps"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:height="80dp"
+        android:minHeight="50dp"
+        android:text="Ver no Google Maps"
+        android:background="@drawable/btn_shape"
+        android:textSize="18sp" />
 
 </LinearLayout>

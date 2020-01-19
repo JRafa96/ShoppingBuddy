@@ -5,117 +5,182 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
-import android.graphics.Bitmap;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
-import com.project.shoppingbuddy.helper.SQLiteHandler;
-import com.project.shoppingbuddy.helper.SessionManager;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class combustiveisActivity extends AppCompatActivity {
 
     private final Handler uiHandler = new Handler();
-    private Supermercado supermercado;
-    //private ArrayAdapter<String> adapter;
-    private SupermercadosAdapter supermercadosAdapter;
+    private Combustivel combustivel;
+    private PostoCombustivel postoCombustivel;
+    private CombustiveisAdapter combustiveisAdapter;
     private ProgressDialog progressDialog;
     private RecyclerView recyclerView;
-    private ArrayList<Supermercado> supermercadosList = new ArrayList<>();
-
-    private class JSHtmlInterface {
-        @android.webkit.JavascriptInterface
-        public void showHTML(String html) {
-            final String htmlContent = html;
-
-            uiHandler.post(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            Document doc = Jsoup.parse(htmlContent);
-                            Elements elements = doc.select("div.name, div.price:nth-of-type(1) div.encoded");
-                            supermercadosList.clear();
-                            for (Element element : elements) {
-                                supermercado = new Supermercado();
-                                String[] divName = element.select("div.name").text().split("Actualizado");
-                                String name = divName[0];
-                                supermercado.setName(name);
-                                String price = element.select("div.encoded").text();
-                                supermercado.setPreço(price);
-
-                                supermercadosList.add(supermercado);
-                            }
-                            supermercadosAdapter.notifyDataSetChanged();
-                        }
-                    }
-            );
-        }
-    }
+    private ArrayList<Combustivel> combustivelList = new ArrayList<>();
+    private Spinner spinner;
+    private static final String[] paths = {"Gasoleo Plus", "Gasoleo Simples", "Gasolina 95 Plus", "Gasolina 95 Simples" , "Gasolina 98 Plus" , "Gasolina 98 Simples" , "GPL Auto"};
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_combustiveis);
+        final RequestQueue queue = Volley.newRequestQueue(this);
 
         recyclerView = findViewById(R.id.recycler);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        supermercadosAdapter = new SupermercadosAdapter(this,supermercadosList);
-        recyclerView.setAdapter(supermercadosAdapter);
+        combustiveisAdapter = new CombustiveisAdapter (this, combustivelList);
+        recyclerView.setAdapter(combustiveisAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
 
-        progressDialog = ProgressDialog.show(this, "Loading","Please wait...", true);
-        progressDialog.setCancelable(true);
+        spinner = (Spinner)findViewById(R.id.spinner1);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
+                android.R.layout.simple_spinner_item,paths);
 
-        try {
-            final WebView browser = new WebView(this);
-            browser.setVisibility(View.INVISIBLE);
-            browser.setLayerType(View.LAYER_TYPE_NONE,null);
-            browser.getSettings().setJavaScriptEnabled(true);
-            browser.getSettings().setBlockNetworkImage(true);
-            browser.getSettings().setDomStorageEnabled(false);
-            browser.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-            browser.getSettings().setLoadsImagesAutomatically(false);
-            browser.getSettings().setGeolocationEnabled(false);
-            browser.getSettings().setSupportZoom(false);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 
-            browser.addJavascriptInterface(new JSHtmlInterface(), "JSBridge");
+                combustivelList.clear();
 
-            browser.setWebViewClient(
-                    new WebViewClient() {
+                // Request a string response from the provided URL.
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, AppConfig.URL_COMBUSTIVEIS + "?tipo=" + URLEncoder.encode(paths[position]),
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Log.d("resposta", "chegou a resposta" + response);
+                                try {
 
-                        @Override
-                        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                            progressDialog.show();
-                            super.onPageStarted(view, url, favicon);
-                        }
+                                    JSONArray jArray = new JSONArray(response);
 
-                        @Override
-                        public void onPageFinished(WebView view, String url) {
-                            browser.loadUrl("javascript:window.JSBridge.showHTML('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
-                            progressDialog.dismiss();
-                        }
+                                    for (int i=0; i < jArray.length(); i++)
+                                    {
+                                        try {
+                                            JSONObject row = jArray.getJSONObject(i);
+                                            // Pulling items from the array
+                                            String postoId = row.getString("postoId");
+                                            postoId = convertPostoId(postoId);
+                                            String preco = row.getString("preco");
+                                            String distancia = "2Km";
+
+                                            combustivel = new Combustivel(postoId,preco,distancia);
+                                            combustivelList.add(combustivel);
+
+                                        } catch (JSONException e) {
+                                            Log.e("jsonPosto", "Não conseguiu dar parse no JSON: \"" + e + "\"");
+                                        }
+                                    }
+
+                                    combustiveisAdapter.notifyDataSetChanged();
+
+
+
+                                    Log.d("jsonObj", "Parse no json");
+
+                                } catch (Throwable t) {
+                                    Log.e("jsonObj", "Não conseguiu dar parse no JSON: \"" + response + "\"");
+                                }
+
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("resposta", "erro na resposta" + error);
                     }
-            );
+                });
 
-            browser.loadUrl("https://www.maisgasolina.com/combustivel-mais-barato/santarem/santarem/sc95plus/todos/");
-            if(getSupportActionBar()!=null) getSupportActionBar().setTitle(browser.getUrl());
+                queue.add(stringRequest);
+            }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+            }
+
+        });
+
+
+
+
+
+
+
+
+        /*progressDialog = ProgressDialog.show(this, "A carregar","Por favor espere...", true);
+        progressDialog.setCancelable(true);*/
+
+
+    }
+
+
+    public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+
+        switch (position) {
+            case 0:
+                // Whatever you want to happen when the first item gets selected
+                break;
+            case 1:
+                // Whatever you want to happen when the second item gets selected
+                break;
+            case 2:
+                // Whatever you want to happen when the thrid item gets selected
+                break;
+
         }
+    }
+
+    public String convertPostoId(String postoId){
+        switch (postoId){
+            case "1": return "Galp - Pernes";
+            case "2": return "Galp Santarém";
+            case "3": return "Galp - J.M.Cordeiro, Lda - N/S";
+            case "4": return "Galp - J.M.Cordeiro, Lda - S/N";
+            case "5": return "BP - A1 Santarém S/N";
+            case "6": return "BP - A1 Santarém N/S";
+            case "7": return "Prio - Alcanhões";
+            case "8": return "BP - Pé da Pedreira";
+            case "9": return "Repsol - Pernes";
+            case "10": return "BP - Santarém";
+            case "11": return "Repsol - S. Pedro - Santarém";
+            case "12": return "Repsol - Santarém";
+            case "13": return "Pingo Doce - Santarém";
+            case "14": return "E.Leclerc - Santarém";
+            case "15": return "Gasprocar - Santarém";
+            default: return "Inválido";
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(getApplicationContext(),
+                MainActivity.class);
+        startActivity(i);
+        finish();
     }
 }
