@@ -76,23 +76,24 @@ def scraping(lista):
     for item in lista:
         name = item.find('div', class_='name').text.split('Actualizado')[0]
         temp = item.findAll('div', class_='price')
-        postoId = convertPostoName(name);
+        postoId = convertPostoName(name)
 
         for y in range(0, len(temp)):
             if bool(temp[y].find('div', class_='encoded')):
                 data = temp[y].text.split('€')
                 tipo = data[0]
+                tipo = tipo.replace("+","Plus")
                 price = data[1]
                 if "actualizado" in price:
                     price = price.split('Preço')[0]
-                db.insert("INSERT INTO `preçoscombustivel` (`posto_Id`, `tipo`, `preço`) VALUES ('%s', '%s', '%s')" % (
+                db.insert("INSERT INTO `precoscombustivel` (`posto_Id`, `tipo`, `preço`) VALUES ('%s', '%s', '%s')" % (
                 postoId, tipo, price))
                 print("Posto " + name + " id= " + str(postoId) + " tem " + tipo + " a " + price + " euros")
 
 
 def main():
     db = Database()
-    db.query("TRUNCATE TABLE preçoscombustivel")
+    db.query("TRUNCATE TABLE precoscombustivel")
     page1 = Page('https://www.maisgasolina.com/lista-de-postos/santarem/santarem/')
     page2 = Page('https://www.maisgasolina.com/lista-de-postos/santarem/santarem/2/')
     soup1 = bs.BeautifulSoup(page1.html, 'lxml')
