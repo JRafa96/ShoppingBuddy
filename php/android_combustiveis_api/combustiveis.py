@@ -83,6 +83,7 @@ def scraping(lista):
                 data = temp[y].text.split('€')
                 tipo = data[0]
                 tipo = tipo.replace("+","Plus")
+                tipo = tipo.replace("ó","o")
                 price = data[1]
                 if "actualizado" in price:
                     price = price.split('Preço')[0]

@@ -2,12 +2,12 @@ package com.project.shoppingbuddy;
 
 public class Combustivel {
 
-    private String tipo;
+    private String nome;
     private String preço;
     private String distancia;
 
-    public Combustivel(String tipo, String preço, String distancia) {
-        this.tipo = tipo;
+    public Combustivel(String nome, String preço, String distancia) {
+        this.nome = nome;
         this.preço = preço;
         this.distancia = distancia;
     }
@@ -16,12 +16,12 @@ public class Combustivel {
     }
 
 
-    public String getTipo() {
-        return tipo;
+    public String getNome() {
+        return nome;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getPreço() {
@@ -39,6 +39,4 @@ public class Combustivel {
     public void setDistancia(String distancia) {
         this.distancia = distancia;
     }
-
-
 }

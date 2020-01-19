@@ -33,7 +33,7 @@ public class CombustiveisAdapter extends RecyclerView.Adapter<CombustiveisAdapte
     @Override
     public void onBindViewHolder(CombustiveisAdapter.MyViewHolder holder, int position) {
 
-        holder.tipo.setText(combustivelList.get(position).getTipo());
+        holder.tipo.setText(combustivelList.get(position).getNome());
         holder.preço.setText(combustivelList.get(position).getPreço());
         holder.distancia.setText(combustivelList.get(position).getDistancia());
     }
@@ -50,7 +50,7 @@ public class CombustiveisAdapter extends RecyclerView.Adapter<CombustiveisAdapte
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            tipo = itemView.findViewById(R.id.tipo);
+            tipo = itemView.findViewById(R.id.posto);
             preço = itemView.findViewById(R.id.preço);
             distancia = itemView.findViewById(R.id.distancia);
 

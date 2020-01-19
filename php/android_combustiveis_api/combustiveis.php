@@ -9,8 +9,12 @@ if (mysqli_connect_errno($con)) {
 if (isset($_GET['tipo'])) {
     $tipo = $_GET['tipo'];
 
+    $tipo = $con->real_escape_string($tipo);
 
-    $stmt = $con->prepare("SELECT * FROM precoscombustivel where tipo= '$tipo'");
+
+
+
+    $stmt = $con->prepare("SELECT * FROM precoscombustivel where tipo= '$tipo' order by 'preço'");
     $stmt->execute();
     $stmt->bind_result($id, $postoId, $tipoC, $preco);
 
@@ -21,9 +25,9 @@ if (isset($_GET['tipo'])) {
         $temp['id'] = $id;
         $temp['postoId'] = $postoId;
         $temp['tipo'] = $tipoC;
+        $temp['preco'] = $preco;
         array_push($precos, $temp);
     }
-
     echo json_encode($precos);
     mysqli_close($con);
 }

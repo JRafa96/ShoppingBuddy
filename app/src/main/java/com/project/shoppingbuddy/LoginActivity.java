@@ -109,7 +109,7 @@ public class LoginActivity extends Activity {
 
                 try {
                     JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("erro");
+                    boolean error = jObj.getBoolean("error");
 
                     if (!error) {
 
