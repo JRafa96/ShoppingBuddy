@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#e6ed17"
+        android:background="@drawable/backgroud_grad"
         android:orientation="horizontal">
 
         <TextView

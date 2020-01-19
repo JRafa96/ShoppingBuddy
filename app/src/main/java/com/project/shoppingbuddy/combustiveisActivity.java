@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -68,8 +69,6 @@ public class combustiveisActivity extends AppCompatActivity {
 
                 combustivelList.clear();
 
-                Toast.makeText(getApplicationContext(), "Clicou no " + paths[position], Toast.LENGTH_LONG).show();
-
                 // Request a string response from the provided URL.
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, AppConfig.URL_COMBUSTIVEIS + "?tipo=" + URLEncoder.encode(paths[position]),
                         new Response.Listener<String>() {
@@ -86,6 +85,7 @@ public class combustiveisActivity extends AppCompatActivity {
                                             JSONObject row = jArray.getJSONObject(i);
                                             // Pulling items from the array
                                             String postoId = row.getString("postoId");
+                                            postoId = convertPostoId(postoId);
                                             String preco = row.getString("preco");
                                             String distancia = "2Km";
 
@@ -153,5 +153,34 @@ public class combustiveisActivity extends AppCompatActivity {
                 break;
 
         }
+    }
+
+    public String convertPostoId(String postoId){
+        switch (postoId){
+            case "1": return "Galp - Pernes";
+            case "2": return "Galp Santarém";
+            case "3": return "Galp - J.M.Cordeiro, Lda - N/S";
+            case "4": return "Galp - J.M.Cordeiro, Lda - S/N";
+            case "5": return "BP - A1 Santarém S/N";
+            case "6": return "BP - A1 Santarém N/S";
+            case "7": return "Prio - Alcanhões";
+            case "8": return "BP - Pé da Pedreira";
+            case "9": return "Repsol - Pernes";
+            case "10": return "BP - Santarém";
+            case "11": return "Repsol - S. Pedro - Santarém";
+            case "12": return "Repsol - Santarém";
+            case "13": return "Pingo Doce - Santarém";
+            case "14": return "E.Leclerc - Santarém";
+            case "15": return "Gasprocar - Santarém";
+            default: return "Inválido";
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(getApplicationContext(),
+                MainActivity.class);
+        startActivity(i);
+        finish();
     }
 }
