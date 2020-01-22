@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.project.shoppingbuddy.Classes.Supermercado;
+
 import java.util.ArrayList;
 
 public class SupermercadosAdapter extends RecyclerView.Adapter<SupermercadosAdapter.MyViewHolder> {

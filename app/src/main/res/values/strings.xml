@@ -9,5 +9,12 @@
     <string name="btn_link_to_login">Já está registado? Faça Login!.</string>
     <string name="welcome">Bem vindo ao ShoppingBuddy</string>
     <string name="btn_logout">LOGOUT</string>
-    <string name="name">Nome</string>
+    
+    
+    <string-array name="opcoesCompra">
+        <item>Guardar Lista</item>
+        <item>Guardar Lista</item>
+        <item>Adicionar a lista</item>
+        <item>Cancelar</item>
+    </string-array>
 </resources>
