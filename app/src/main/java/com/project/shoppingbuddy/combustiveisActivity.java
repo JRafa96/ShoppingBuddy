@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +31,7 @@ import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -42,7 +44,6 @@ public class combustiveisActivity extends AppCompatActivity {
 
     private final Handler uiHandler = new Handler();
     private Combustivel combustivel;
-    private PostoCombustivel postoCombustivel = new PostoCombustivel();
     private CombustiveisAdapter combustiveisAdapter;
     private ProgressDialog progressDialog;
     private RecyclerView recyclerView;
@@ -58,17 +59,16 @@ public class combustiveisActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_combustiveis);
-
         btn_Maps = findViewById(R.id.btn_Maps);
+        setPostos();
 
         btn_Maps.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                combustiveisSingleton.getInstance().setPostoCombustivelsList(postoCombustivelsList);
+
                 Intent i = new Intent(getApplicationContext(),
                         combustiveisMapsActivity.class);
                 startActivity(i);
-                finish();
             }
 
         });
@@ -219,6 +219,9 @@ public class combustiveisActivity extends AppCompatActivity {
 
                             JSONArray jArray = new JSONArray(response);
 
+                            postoCombustivelsList.clear();
+
+
                             for (int i=0; i < jArray.length(); i++)
                             {
                                 try {
@@ -228,7 +231,7 @@ public class combustiveisActivity extends AppCompatActivity {
                                     String postoNome = convertPostoId(postoId);
                                     String preco = row.getString("preco");
 
-
+                                    PostoCombustivel postoCombustivel = new PostoCombustivel();
                                     postoCombustivel.setPostoId(postoId);
                                     postoCombustivel.setPreco(preco);
                                     postoCombustivel.setNome(postoNome);
@@ -243,29 +246,89 @@ public class combustiveisActivity extends AppCompatActivity {
                                     combustivelList.add(combustivel);
 
                                 } catch (JSONException e) {
-                                    Log.e("jsonPosto", "Erro no array: \"" + e + "\"");
+                                    Log.e("jsonPosto", "Erro no array 247: \"" + e + "\"");
                                 }
                             }
+                            combustiveisSingleton.getInstance().setPostoCombustivelsList(postoCombustivelsList);
 
                             combustiveisAdapter.notifyDataSetChanged();
 
 
 
-                            Log.d("jsonObj", "Parse no json");
+                            Log.d("jsonObj", "Parse no json 255");
 
                         } catch (Throwable t) {
-                            Log.e("jsonObj", "Não conseguiu dar parse no JSON: \"" + t + "\"");
+                            Log.e("jsonObj", "Não conseguiu dar parse no JSON: 258 \"" + t + "\"");
                         }
 
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("resposta", "erro na resposta" + error);
+                Log.e("resposta", "erro na resposta 265" + error);
             }
         });
 
         queue.add(stringRequest);
 
     }
+
+    private void setPostos(){
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, AppConfig.URL_COMBUSTIVEIS + "?postos",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+
+                            Log.d("response", response);
+
+                            JSONArray jArray = new JSONArray(response);
+                            ArrayList<PostoCombustivel> tempArray = new ArrayList<>();
+
+                            for (int i=0; i < jArray.length(); i++)
+                            {
+                                try {
+                                    JSONObject row = jArray.getJSONObject(i);
+                                    // Pulling items from the array
+                                    String postoId = row.getString("id");
+                                    String lat =  row.getString("latitude");
+                                    String lon =  row.getString("longitude");
+                                    String nome = row.getString("nome");
+
+
+                                    PostoCombustivel tempPC = new PostoCombustivel();
+                                    tempPC.setNome(nome);
+                                    tempPC.setPostoId(postoId);
+                                    tempPC.setLatitude(lat);
+                                    tempPC.setLongitude(lon);
+
+                                    tempArray.add(tempPC);
+
+                                    combustiveisSingleton.getInstance().setPostosList(tempArray);
+
+
+
+
+                                } catch (JSONException e) {
+                                    Log.e("jsonPosto", "Erro no array: \"" + e + "\"");
+                                }
+                            }
+
+                            Log.d("jsonObj", "Parse no json dos postos");
+                        } catch (Throwable t) {
+                            Log.e("jsonObj", "Não conseguiu dar parse no JSON dos postos: \"" + t + "\"");
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("response", "Erro response");
+            }
+        });
+
+
+        queue.add(stringRequest);}
 }

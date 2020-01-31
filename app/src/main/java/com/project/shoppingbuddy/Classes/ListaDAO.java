@@ -1,3 +1,5 @@
+/*
+
 package com.project.shoppingbuddy.Classes;
 
 @DAO
@@ -8,3 +10,4 @@ public interface ListaDAO {
 
      void delete(int id);
 }
+*/

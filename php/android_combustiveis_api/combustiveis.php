@@ -44,21 +44,29 @@ if (isset($_GET['postos'])) {
     $stmt->bind_result($id, $nome, $latitude, $longitude);
 
     $postos = array();
-
+    $counter = 0;
     try {
         while ($stmt->fetch()) {
+
             $temp = array();
             $temp['id'] = $id;
             $temp['nome'] = $nome;
             $temp['latitude'] = $latitude;
             $temp['longitude'] = $longitude;
             array_push($postos, $temp);
+            
+           
+            /*$bindResults = array($id, $nome, $latitude, $longitude);
+            array_push($postos,$bindResults);*/
+            
+           
         }
+
         echo json_encode($postos);
+        
     } catch (\Throwable $th) {
         echo $th;
     }
-
-
     mysqli_close($con);
+   
 }

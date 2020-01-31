@@ -1,7 +1,13 @@
 package com.project.shoppingbuddy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -24,14 +30,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
 public class combustiveisMapsActivity extends AppCompatActivity {
 
     private GoogleMap map;
     private ArrayList<PostoCombustivel> postoCombustivelsList;
+    private ArrayList<PostoCombustivel> postosList;
     private Map<LatLng, String> markers = new HashMap<LatLng,String>();
     SupportMapFragment mapFragment;
 
@@ -41,70 +50,31 @@ public class combustiveisMapsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_combustiveis_maps);
         mapFragment=(SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
 
+
+
+
         postoCombustivelsList = combustiveisSingleton.getInstance().getPostoCombustivelsList();
+        postosList = combustiveisSingleton.getInstance().getPostosList();
 
 
-        RequestQueue queue = Volley.newRequestQueue(this);
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                1);
 
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, AppConfig.URL_COMBUSTIVEIS + "?postos",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-
-                            Log.d("response", response);
-
-                            JSONArray jArray = new JSONArray(response);
-
-                            for (int i=0; i < jArray.length(); i++)
-                            {
-                                try {
-                                    JSONObject row = jArray.getJSONObject(i);
-                                    // Pulling items from the array
-                                    String postoId = row.getString("id");
-                                    Double lat =  Double.parseDouble(row.getString("latitude"));
-                                    Double lon =  Double.parseDouble(row.getString("longitude"));
-                                    String preco;
-                                    LatLng latLng;
-
-                                    Log.d("response postoId", postoId);
-
-                                    for (int j = 0; j < postoCombustivelsList.size(); j++){
-
-                                        Log.d("response postoId", postoCombustivelsList.get(j).getPostoId());
-
-                                        if(postoCombustivelsList.get(j).getPostoId() == postoId){
-                                            preco = row.getString(postoCombustivelsList.get(j).getPreco());
-                                            latLng = new LatLng(lat,lon);
-                                            markers.put(latLng,postoCombustivelsList.get(j).getNome());
-
-                                            Log.d("marker", "lat = " + latLng + " posto = " + postoCombustivelsList.get(j).getNome());
-                                        }else{
-                                            Log.d("elseResponse", postoCombustivelsList.get(j).getPostoId());
-                                        }
-                                    }
-                                } catch (JSONException e) {
-                                    Log.e("jsonPosto", "Erro no array: \"" + e + "\"");
-                                }
-                            }
-                            addMarkers();
-                            Log.d("jsonObj", "Parse no json dos postos");
-                        } catch (Throwable t) {
-                            Log.e("jsonObj", "Não conseguiu dar parse no JSON dos postos: \"" + t + "\"");
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("response", "Erro response");
+        for(int j = 0; j < postoCombustivelsList.size(); j++){
+            for (int i = 0; i<postosList.size(); i++){
+                if(Objects.equals(postoCombustivelsList.get(j).getPostoId(), postosList.get(i).getPostoId())){
+                    Double lat = Double.parseDouble(postosList.get(i).getLatitude());
+                    Double lon = Double.parseDouble(postosList.get(i).getLongitude());
+                    LatLng latLng = new LatLng(lat,lon);
+                    String preco = postoCombustivelsList.get(j).getPreco();
+                    markers.put(latLng,preco);
+                }
             }
-        });
+        }
 
-
-        queue.add(stringRequest);
-
-
+        addMarkers();
 
     }
 
@@ -115,17 +85,40 @@ public class combustiveisMapsActivity extends AppCompatActivity {
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
 
+                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    map.setMyLocationEnabled(true);
+                }
+
+
                 Iterator it = markers.entrySet().iterator();
                 while (it.hasNext()) {
                     Map.Entry pair = (Map.Entry)it.next();
                     LatLng latLng = (LatLng) pair.getKey();
-                    String postoNome = (String) pair.getValue();
-                    Log.d("marker", "lat = " + latLng + " posto = " + postoNome);
-                    map.addMarker(new MarkerOptions().position(latLng).title(postoNome));
+                    String postoPreço = (String) pair.getValue();
+                    Log.d("marker", "latLng = " + latLng + " preco = " + postoPreço);
+                    map.addMarker(new MarkerOptions().position(latLng).title(postoPreço)).showInfoWindow();
+
                     it.remove();
                 }
+
+                map.getUiSettings().setZoomControlsEnabled(false);
+                map.getUiSettings().setMyLocationButtonEnabled(true);
+                map.getUiSettings().setCompassEnabled(true);
+                map.getUiSettings().setRotateGesturesEnabled(true);
+                map.getUiSettings().setZoomGesturesEnabled(true);
+                
+
+
 
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+
 }
