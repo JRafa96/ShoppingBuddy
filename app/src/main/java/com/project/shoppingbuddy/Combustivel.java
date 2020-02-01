@@ -1,5 +1,6 @@
 package com.project.shoppingbuddy;
 
+
 public class Combustivel {
 
     private String nome;

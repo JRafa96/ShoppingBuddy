@@ -11,9 +11,6 @@ if (isset($_GET['tipo'])) {
 
     $tipo = $con->real_escape_string($tipo);
 
-
-
-
     $stmt = $con->prepare("SELECT * FROM precoscombustivel where tipo= '$tipo' order by 'preço'");
     $stmt->execute();
     $stmt->bind_result($id, $postoId, $tipoC, $preco);
@@ -38,4 +35,38 @@ if (isset($_GET['postoId'])) {
     $data = mysqli_fetch_object($result);
     echo json_encode($data);
     mysqli_close($con);
+}
+
+if (isset($_GET['postos'])) {
+
+    $stmt = $con->prepare("SELECT * FROM postoscombustivel");
+    $stmt->execute();
+    $stmt->bind_result($id, $nome, $latitude, $longitude);
+
+    $postos = array();
+    $counter = 0;
+    try {
+        while ($stmt->fetch()) {
+
+            $temp = array();
+            $temp['id'] = $id;
+            $temp['nome'] = $nome;
+            $temp['latitude'] = $latitude;
+            $temp['longitude'] = $longitude;
+            array_push($postos, $temp);
+            
+           
+            /*$bindResults = array($id, $nome, $latitude, $longitude);
+            array_push($postos,$bindResults);*/
+            
+           
+        }
+
+        echo json_encode($postos);
+        
+    } catch (\Throwable $th) {
+        echo $th;
+    }
+    mysqli_close($con);
+   
 }
