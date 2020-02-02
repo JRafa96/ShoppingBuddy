@@ -1,7 +1,9 @@
 package com.project.shoppingbuddy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,6 +40,10 @@ public class MainActivity extends Activity {
 
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
+
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                1);
 
         // session manager
         session = new SessionManager(getApplicationContext());
