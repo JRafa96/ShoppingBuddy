@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -22,7 +24,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.project.shoppingbuddy.helper.CombustivelComp;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +45,8 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Objects;
 
 
 public class combustiveisActivity extends AppCompatActivity {
@@ -53,14 +62,20 @@ public class combustiveisActivity extends AppCompatActivity {
     public static String parsedDistance;
     public static String response;
     private Button btn_Maps;
+    private ArrayList<PostoCombustivel> postosList;
     private ArrayList<PostoCombustivel> postoCombustivelsList = new ArrayList<>();
+    private FusedLocationProviderClient fusedLocationClient;
+    LatLng myLatLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_combustiveis);
         btn_Maps = findViewById(R.id.btn_Maps);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        setLocation();
         setPostos();
+
 
         btn_Maps.setOnClickListener(new View.OnClickListener() {
 
@@ -221,6 +236,8 @@ public class combustiveisActivity extends AppCompatActivity {
 
                             postoCombustivelsList.clear();
 
+                            postosList = combustiveisSingleton.getInstance().getPostosList();
+
 
                             for (int i=0; i < jArray.length(); i++)
                             {
@@ -230,15 +247,36 @@ public class combustiveisActivity extends AppCompatActivity {
                                     String postoId = row.getString("postoId");
                                     String postoNome = convertPostoId(postoId);
                                     String preco = row.getString("preco");
+                                    String distancia = "3Km";
 
                                     PostoCombustivel postoCombustivel = new PostoCombustivel();
                                     postoCombustivel.setPostoId(postoId);
                                     postoCombustivel.setPreco(preco);
                                     postoCombustivel.setNome(postoNome);
+                                    for (int j = 0; j< postosList.size(); j++){
+                                        if(Objects.equals(postoId, postosList.get(j).getPostoId())){
+                                            Location locationA = new Location("A");
+                                            locationA.setLatitude(Double.parseDouble(postosList.get(j).getLatitude()));
+                                            locationA.setLongitude(Double.parseDouble(postosList.get(j).getLongitude()));
+                                            Log.d("locationA", locationA.toString());
+
+                                            Log.d("myLocation", myLatLng.toString());
+
+                                            Location locationB = new Location("B");
+                                            locationB.setLatitude(myLatLng.latitude);
+                                            locationB.setLongitude(myLatLng.longitude);
+                                            Log.d("locationB", locationB.toString());
+                                            distancia = Double.toString(Math.round((locationA.distanceTo(locationB)/1000) * 10.0) / 10.0) + "Km";
+                                            Log.d("distancia", distancia);
+
+                                        }
+                                    }
                                     postoCombustivelsList.add(postoCombustivel);
 
 
-                                    String distancia = "3Km";
+
+
+                                    Log.d("locationDist", myLatLng.toString());
 
 
 
@@ -249,6 +287,8 @@ public class combustiveisActivity extends AppCompatActivity {
                                     Log.e("jsonPosto", "Erro no array 247: \"" + e + "\"");
                                 }
                             }
+
+                            Collections.sort(combustivelList, new CombustivelComp());
                             combustiveisSingleton.getInstance().setPostoCombustivelsList(postoCombustivelsList);
 
                             combustiveisAdapter.notifyDataSetChanged();
@@ -330,5 +370,31 @@ public class combustiveisActivity extends AppCompatActivity {
         });
 
 
-        queue.add(stringRequest);}
+        queue.add(stringRequest);
+    }
+
+
+    public void setLocation(){
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            myLatLng = new LatLng(location.getLatitude(),location.getLongitude());
+
+                        }else{
+                            Log.d("location", "erro getLocation");
+                        }
+                    }
+                });
+
+    }
+
+
+
+
+
+
 }
