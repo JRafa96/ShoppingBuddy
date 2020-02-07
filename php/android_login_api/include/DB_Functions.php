@@ -112,7 +112,7 @@ class DB_Functions
 
     public function getProdutos($produtos)
     {
-        $stmt = $this->conn->prepare("SELECT * FROM produtos WHERE name = ? ");
+        $stmt = $this->conn->prepare("SELECT * FROM produtos WHERE name like %?% ");
 
         $stmt->bind_param("s", $produtos);
 
@@ -129,7 +129,7 @@ class DB_Functions
 
     public function getSupermercados($supermercados)
     {
-        $stmt = $this->conn->prepare("SELECT * FROM supermercados WHERE name = ? ");
+        $stmt = $this->conn->prepare("SELECT * FROM supermercados WHERE name like %?% ");
 
         $stmt->bind_param("s", $supermercados);
 
@@ -140,6 +140,26 @@ class DB_Functions
         $listaresult = array();
         while ($row = $listasuper->fetch()) {
             $linha = array('id' => $row['id'], 'name' => $row['name'], 'latitude' => $row['latitude'], 'longitude' => $row['longitude']);
+            array_push($listaresult, $linha);
+        }
+
+        return $listaresult;
+    }
+
+
+    public function getLista($lista)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM lista WHERE id_user= ?");
+
+        $stmt->bind_param("s", $lista);
+
+        $stmt->execute();
+
+        $listalistas = $stmt->execute();
+
+        $listaresult = array();
+        while ($row = $listalistas->fetch()) {
+            $linha = array('id_lista' => $row['id_lista'], 'id_user' => $row['id_user'], 'nome_lista' => $row['nome_lista']);
             array_push($listaresult, $linha);
         }
 
