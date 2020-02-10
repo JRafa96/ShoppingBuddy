@@ -1,20 +1,35 @@
 CREATE TABLE `listas` (
-  `id_lista` bigint(20) NOT NULL ,
-  'id_user' bigint(20) NOT NULL,
-  'nome_lista' varchar(255) NOT NULL
+  `id_lista` int(11) ,
+  `id_user` int(11) NOT NULL,
+  `nome_lista` varchar(255) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 
-INSERT INTO `lista` (`id_lista`, `id_user`, `nome_lista`) VALUES
-(1, 1, 'Pequeno-Almoço'),
-(2,1,'Mensal'),
-(4,1,'Jantar'),
+INSERT INTO `listas` (`id_lista`, `id_user`, `nome_lista`) VALUES
+(null, 1, 'Pequeno-Almoço'),
+(null,1,'Mensal'),
+(null,1,'Jantar'),
 
 
-(1, 2, 'Ginasio'),
-(2,2,'Vegetariano'),
-(4,2,'Simples'),
+(null, 2, 'Ginasio'),
+(null,2,'Vegetariano'),
+(null,2,'Simples'),
 
-(1, 3, 'Muher'),
-(2,3,'Filhos'),
-(4,3,'Pais');
+(null, 3, 'Muher'),
+(null,3,'Filhos'),
+(null,3,'Pais');
+
+
+
+ALTER TABLE `listas`
+  ADD PRIMARY KEY (`id_lista`);
+
+ALTER TABLE `listas`
+ADD CONSTRAINT `FK_Users`
+FOREIGN KEY (`id_user`) REFERENCES users(`id)`;
+
+ALTER TABLE `listas`
+  MODIFY `id_lista` int(11) NOT NULL AUTO_INCREMENT;
+
+
+COMMIT;

@@ -14,9 +14,9 @@ if (isset($_GET['id'])) {
 
 
 
-    $stmt = $con->prepare("SELECT * FROM lista where id= '$id'");
+    $stmt = $con->prepare("SELECT * FROM lista where id_user= '$id'");
     $stmt->execute();
-    $stmt->bind_result($idLista, $idUser, $idProdutos);
+    $stmt->bind_result($idLista, $idUser);
 
     $listas = array();
 

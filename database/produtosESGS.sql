@@ -336,7 +336,7 @@ INSERT INTO `products` (`id`, `name`) VALUES
 (1055030305, 'Câmara de segurança AXIS P1367-E'),
 (1055030318, 'Câmara de segurança AXIS V5914 50Hz'),
 (1055030323, 'Câmara de segurança AXIS M3037-PVE'),
-(1055030335, 'Câmara de segurança AXIS P3707-PE'
+(1055030335, 'Câmara de segurança AXIS P3707-PE'),
 (1055030338, 'Câmara de segurança AXIS Q1615-E MK II'),
 (1055030340, 'Câmara de segurança AXIS A8105-E'),
 (1055030345, 'Câmara de segurança AXIS P3227-LVE'),
@@ -410,7 +410,7 @@ INSERT INTO `products` (`id`, `name`) VALUES
 (1055174369, 'Kit Câmara WiFi D-Link Pro DCS-2802KT'),
 (1055219758, 'Intercomunicador 2N TELECOMMUNICATIONS 9155101C'),
 (1055242649, 'Kit de videovigilância D-LINK DNR16-4802-2'),
-(1055242653, 'Sistema de áudio e vídeo AUERSWALD TFS-Dialog 400 em Azul',),
+(1055242653, 'Sistema de áudio e vídeo AUERSWALD TFS-Dialog 400 em Azul'),
 (1055249957, 'Sensor APC NetBotz Particle Sensor PS100'),
 (1055250491, 'Servidor AXIS F41'),
 (1055250492, 'Módulo câmara segurança AXIS F44'),
@@ -451,7 +451,7 @@ INSERT INTO `products` (`id`, `name`) VALUES
 (1060857504, 'Câmara de segurança HIKVISION DIGITAL TECHNOLOGY DS-2CD4A26FWD-IZS/P'),
 (1060857546, 'Câmara de segurança LEVELONE FCS-5102'),
 (1060857581, 'Kit de videoconferência AVERMEDIA VC322'),
-(1060857640, 'Câmara de segurança AXIS M5065 PTZ'1),
+(1060857640, 'Câmara de segurança AXIS M5065 PTZ'),
 (1060857693, 'Kit de videovigilância NEDIS AHDS204CWT4'),
 (1060887583, 'Kit instalação AXIS T8415 Wireless'),
 (1060947447, 'Lâmpada inteligente PHILIPS BY SIGNIFY branco e cor Signe chão 40802/48/P7'),
@@ -523,7 +523,7 @@ INSERT INTO `products` (`id`, `name`) VALUES
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`);
-
+COMMIT;
 --
 -- Índices para tabela `products2`
 --
