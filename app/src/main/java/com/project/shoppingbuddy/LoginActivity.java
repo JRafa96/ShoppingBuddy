@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -110,7 +111,7 @@ public class LoginActivity extends Activity {
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
-
+                Log.d("Aqui",response);
                     if (!error) {
 
                         session.setLogin(true);
@@ -118,12 +119,21 @@ public class LoginActivity extends Activity {
 
                         String uid = jObj.getString("uid");
 
+
                         JSONObject user = jObj.getJSONObject("user");
+
+                        String id = user.getString("id");
                         String name = user.getString("name");
                         String email = user.getString("email");
                         String created_at = user
                                 .getString("created_at");
 
+
+                        SharedPreferences sharedP = getApplicationContext().getSharedPreferences("User",MODE_PRIVATE);
+                        SharedPreferences.Editor sEdit = sharedP.edit();
+
+                        sEdit.putString("id",id);
+                        sEdit.apply();
 
                         db.addUser(name, email, uid, created_at);
 

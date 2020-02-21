@@ -1,101 +1,184 @@
 package com.project.shoppingbuddy;
 
-
-import android.os.AsyncTask;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import static com.project.shoppingbuddy.AppConfig.URL_LISTAS;
+import com.project.shoppingbuddy.Classes.Lista;
+import com.project.shoppingbuddy.Classes.ListaProdutos;
 
+import static com.project.shoppingbuddy.AppConfig.URL_LISTAS_PRODUTOS;
 
 public class listaComprasGActivity extends AppCompatActivity {
 
-    ArrayList<String> listItems=new ArrayList<>();
-    ArrayAdapter<String> adapter;
+    ArrayList<String> listItem = new ArrayList<String>();
     Spinner sp;
+
+    RecyclerView recyclerView;
+    ListaProdutosAdapter adapter1;
+    ArrayList<ListaProdutos> listaprodutosList;
+
+    String info;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        sp=(Spinner)findViewById(R.id.sp1);
-      //  adapter=new ArrayAdapter<String>(this,R.layout.activity_listas,R.id.txt,listItems);
-        sp.setAdapter(adapter);
+        setContentView(R.layout.activity_lista_compras_g);
 
-    }
-    public void onStart(){
-        super.onStart();
-        BackTask bt=new BackTask();
-        bt.execute();
-    }
-    private class BackTask extends AsyncTask<Void,Void,Void> {
-        ArrayList<String> list;
-        protected void onPreExecute(){
-            super.onPreExecute();
-            list=new ArrayList<>();
-        }
-        protected Void doInBackground(Void...params){
-            InputStream is=null;
-            String result="";
-            try{
-                HttpClient httpclient=new DefaultHttpClient();
-                HttpPost httppost= new HttpPost(URL_LISTAS);
-                HttpResponse response=httpclient.execute(httppost);
-                HttpEntity entity = response.getEntity();
-                // Get our response as a String.
-                is = entity.getContent();
-            }catch(IOException e){
-                e.printStackTrace();
+        //RecycleView
+        //listaprodutosList = new ArrayList<>();
+
+       // recyclerView = findViewById(R.id.recycler);
+       // recyclerView.setHasFixedSize(true);
+      //  recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        Log.d("Aqui","Aqui");
+        //SharedPreferences
+        SharedPreferences sPref = this.getSharedPreferences("User",MODE_PRIVATE);
+        info = sPref.getString("id","");
+
+        Log.d("Aqui",info);
+
+        //Spinner
+        sp = (Spinner) findViewById(R.id.spLista);
+        listItem = new ArrayList<String>();
+        getdata();
+        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Setting the values to textviews for a selected item
+                ;
             }
 
-            //convert response to string
-            try{
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is,"utf-8"));
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    result+=line;
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+
+            }
+        });
+    }
+
+        private void getdata() {
+            Log.d("Aqui2","123");
+            String tag_string_req = "req_register";
+
+            StringRequest strReq = new StringRequest(Request.Method.POST,
+                    AppConfig.URL_LISTAS, new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String response) {
+                    Log.d("Aqui2",response);
+                    JSONArray j = null;
+                    try {
+                        j = new JSONArray(response);
+                        empdetails(j);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-                is.close();
-                //result=sb.toString();
-            }catch(Exception e){
-                e.printStackTrace();
-            }
+            }, new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("Aqui", "Registration Error: " + error.getMessage());
+
+                }
+            }) {
+
+                @Override
+                protected Map<String, String> getParams() {
+
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("id", info);
 
 
-            // parse json data
-            try{
-                JSONArray jArray =new JSONArray(result);
-                for(int i=0;i<jArray.length();i++){
-                    JSONObject jsonObject=jArray.getJSONObject(i);
-                    // add interviewee name to arraylist
-                    list.add(jsonObject.getString("name"));
+                    return params;
+                }
+
+            };
+
+
+            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+
+
+
+
+
+
+          /*  StringRequest stringRequest = new StringRequest("http://192.168.70.31/php/android_listas_api/getLista.php",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("Aqui2",response);
+                            JSONArray j = null;
+                            try {
+                                j = new JSONArray(response);
+                                empdetails(j);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                        }
+                    }) {
+
+                @Override
+                protected Map<String, String> getParams() {
+
+                    Map<String, String> params = new HashMap<String, String>();
+                        params.put("id", info);
+
+                    return params;
+                }
+            };
+
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            requestQueue.add(stringRequest);
+        */}
+
+        private void empdetails(JSONArray j) {
+            for (int i = 0; i < j.length(); i++) {
+                try {
+                    JSONObject json = j.getJSONObject(i);
+                    listItem.add(json.getString("nome_lista"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
-            catch(JSONException e){
-                e.printStackTrace();
-            }
-            return null;
+            // arrayList.add(0,"Select Employee");
+            sp.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, listItem ));
         }
-        protected void onPostExecute(Void result){
-            listItems.addAll(list);
-            adapter.notifyDataSetChanged();
-        }
-    }
-}
+       }
+
+
+

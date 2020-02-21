@@ -14,7 +14,7 @@ if (isset($_GET['id'])) {
 
 
 
-    $stmt = $con->prepare("SELECT * FROM lista_produtos where id= '$id'");
+    $stmt = $con->prepare("SELECT * FROM lista_produtos");
     $stmt->execute();
     $stmt->bind_result($idLista, $idLista);
 

@@ -86,7 +86,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent j = new Intent(getApplicationContext(),
-                        ListaComprasActivity.class);
+                        listaComprasGActivity.class);
                 startActivity(j);
                 finish();
             }

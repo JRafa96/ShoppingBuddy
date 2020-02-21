@@ -17,16 +17,19 @@ INSERT INTO `listas` (`id_lista`, `id_user`, `nome_lista`) VALUES
 
 (null, 3, 'Muher'),
 (null,3,'Filhos'),
-(null,3,'Pais');
+(null,3,'Pais'),
 
+(null, 6, 'Pequeno-Almoço'),
+(null,6,'Mensal'),
+(null,6,'Jantar');
 
 
 ALTER TABLE `listas`
   ADD PRIMARY KEY (`id_lista`);
 
 ALTER TABLE `listas`
-ADD CONSTRAINT `FK_Users`
-FOREIGN KEY (`id_user`) REFERENCES users(`id)`;
+ADD FOREIGN KEY (`id_user`) REFERENCES users(`id`);
+
 
 ALTER TABLE `listas`
   MODIFY `id_lista` int(11) NOT NULL AUTO_INCREMENT;

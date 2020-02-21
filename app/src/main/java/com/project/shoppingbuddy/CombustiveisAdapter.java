@@ -35,7 +35,6 @@ public class CombustiveisAdapter extends RecyclerView.Adapter<CombustiveisAdapte
 
         holder.tipo.setText(combustivelList.get(position).getNome());
         holder.preço.setText(combustivelList.get(position).getPreço());
-        holder.distancia.setText(combustivelList.get(position).getDistancia());
     }
 
     @Override

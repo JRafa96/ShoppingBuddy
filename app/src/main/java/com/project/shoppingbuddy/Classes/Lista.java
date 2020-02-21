@@ -5,11 +5,17 @@ public class Lista {
     private int id_user;
     private String nome_lista;
 
+    public Lista() {
+    }
+
     public Lista(int id_lista, int id_user, String nome_lista) {
         this.id_lista = id_lista;
         this.id_user = id_user;
         this.nome_lista = nome_lista;
     }
+
+
+
 
     public int getId_lista() {
         return id_lista;

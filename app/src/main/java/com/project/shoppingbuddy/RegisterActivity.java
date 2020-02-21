@@ -169,7 +169,7 @@ public class RegisterActivity extends Activity {
                 return params;
             }
 
-        };
+    };
 
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
