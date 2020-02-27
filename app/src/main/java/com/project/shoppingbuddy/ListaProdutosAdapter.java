@@ -1,6 +1,7 @@
 package com.project.shoppingbuddy;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 
 public class ListaProdutosAdapter extends RecyclerView.Adapter<ListaProdutosAdapter.MyViewHolder> {
     private LayoutInflater inflater;
-    private ArrayList<ListaProdutos> listaprodutosList;
+    public ArrayList<ListaProdutos> listaprodutosList = new ArrayList<>();
 
     public ListaProdutosAdapter(Context ctx, ArrayList<ListaProdutos> listaprodutosArrayList){
 
@@ -33,11 +34,9 @@ public class ListaProdutosAdapter extends RecyclerView.Adapter<ListaProdutosAdap
 
     @Override
     public void onBindViewHolder(ListaProdutosAdapter.MyViewHolder holder, int position) {
-
-        holder.id_listasproduct.setText(listaprodutosList.get(position).getId_listaProdutos());
-        holder.id_lista.setText(listaprodutosList.get(position).getId_lista());
-        holder.id_products.setText(listaprodutosList.get(position).getId_products());
-        holder.price.setText(listaprodutosList.get(position).getId_lista());
+        holder.id_products.setText(String.valueOf(listaprodutosList.get(position).getId_products()));
+        holder.nome_product.setText(String.valueOf(listaprodutosList.get(position).getNome()));
+        holder.price.setText(String.valueOf(listaprodutosList.get(position).getPrice()));
 
     }
 
@@ -48,15 +47,14 @@ public class ListaProdutosAdapter extends RecyclerView.Adapter<ListaProdutosAdap
 
     class MyViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView id_listasproduct, id_lista,id_products,price;
+        public TextView id_products,price,nome_product;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            id_listasproduct = itemView.findViewById(R.id.id);
-            id_lista = itemView.findViewById(R.id.name);
-            id_products = itemView.findViewById(R.id.name);
-            price = itemView.findViewById(R.id.name);
+            id_products = itemView.findViewById(R.id.id_products);
+            nome_product = itemView.findViewById(R.id.nome_product);
+            price = itemView.findViewById(R.id.price);
 
         }
 

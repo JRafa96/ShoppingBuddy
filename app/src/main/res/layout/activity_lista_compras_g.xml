@@ -36,7 +36,8 @@
                 android:id="@+id/btnCriarLista"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Criar Lista" />
+                android:text="Criar Lista"
+                android:onClick="criarLista"/>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

@@ -49,8 +49,8 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.MyView
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            id = itemView.findViewById(R.id.id);
-            name = itemView.findViewById(R.id.name);
+        //    id = itemView.findViewById(R.id.id);
+        //    name = itemView.findViewById(R.id.name);
 
         }
 
