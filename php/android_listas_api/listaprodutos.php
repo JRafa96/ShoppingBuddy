@@ -1,33 +1,36 @@
 <?php
-$con = mysqli_connect("localhost", "root", "", "android_api");
 
-if (mysqli_connect_errno($con)) {
-    echo "Falha ao conectar: " . mysqli_connect_error();
-    die();
+$host = 'localhost';
+$db = 'android_api';
+$userDB='root';
+$passDB='';
+$charset='utf8';
+$link="mysql:host=$host;dbname=$db;charset=$charset";
+
+
+$con = new PDO($link,$userDB,$passDB);
+
+
+if (isset($_POST['id_lista'])) {
+    $id = $_POST['id_lista'];
+
+
+$stmt = $con->prepare("SELECT id_products, price FROM listas_produtos WHERE id_lista = :id");
+$stmt->bindParam("id", $id);
+$stmt->execute();
+$listas_products = array();
+while($row = $stmt->fetch())
+{
+  $stmt2 = $con->prepare("SELECT name FROM products WHERE id = :id");
+  $stmt2->bindParam("id", $row[0]);
+  $stmt2->execute();
+  $stmt2Res = $stmt2->fetch();
+  $temp = array();
+    $temp['id_product'] = $row['id_products'];
+    $temp['nome'] = $stmt2Res[0];
+    $temp['price'] = $row['price'];
+
+    array_push($listas_products, $temp);
 }
-
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-
-    $id = $con->real_escape_string($id);
-
-
-
-
-    $stmt = $con->prepare("SELECT * FROM lista_produtos");
-    $stmt->execute();
-    $stmt->bind_result($idLista, $idLista);
-
-    $listas = array();
-
-    while ($stmt->fetch()) {
-        $temp = array();
-        $temp['idLista'] = $idLista;
-        $temp['idProdutos'] = $idProdutos;
-        $temp['price'] = $price;
-        array_push($listas, $temp);
-    }
-    echo json_encode($listas);
-    mysqli_close($con);
+echo json_encode($listas_products);
 }
-

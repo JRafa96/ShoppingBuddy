@@ -18,6 +18,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 
         $response["error"] = FALSE;
         $response["uid"] = $user["unique_id"];
+		$response["user"]["id"] = $user["id"];
         $response["user"]["name"] = $user["name"];
         $response["user"]["email"] = $user["email"];
         $response["user"]["created_at"] = $user["created_at"];
