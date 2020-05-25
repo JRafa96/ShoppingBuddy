@@ -4,15 +4,17 @@ public class ListaProdutos {
     private int id_products;
     private String nome;
     private Double price;
+    private int quantidade;
 
     public ListaProdutos() {
     }
 
-    public ListaProdutos( int id_products, Double price,String nome) {
+    public ListaProdutos( int id_products, String nome, int quantidade) {
 
         this.id_products = id_products;
-        this.price = price;
         this.nome=nome;
+        this.quantidade=quantidade;
+
     }
 
 
@@ -37,8 +39,16 @@ public class ListaProdutos {
         return price;
     }
 
-    public void setPrice(String nome_lista) {
+    public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
     }
 
 }

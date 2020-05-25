@@ -29,8 +29,9 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `products_supermercados` (
+  `id_ProductsSupermercados` bigint(20) NOT NULL ,
   `id_Supermercados` bigint(20) NOT NULL ,
-  `id_Produtos` bigint(528)  NOT NULL foreign key products,
+  `id_Produtos` bigint(20)  NOT NULL ,
   `price` double NOT NULL,
   foreign key (id_Supermercados) references supermercados(id),
   foreign key (id_Produtos) references products(id)
@@ -40,52 +41,44 @@ CREATE TABLE `products_supermercados` (
 -- Extraindo dados da tabela `products1`
 --
 
-INSERT INTO `products_supermercados` (`id_supermercados`, `id_Produtos`, `price`) VALUES
-(1, 1006899027, 680.74),
-(2,1006899027,700.5),
-(4,1006899027,200.0)
-(5,1006899027,150.0),
+INSERT INTO `products_supermercados` (`id_ProductsSupermercados`,`id_supermercados`, `id_Produtos`, `price`) VALUES
+(null,1, 1006899027, 680.74),
+(null,2,1006899027,700.5),
+(null,3,1006899027,100.0),
+(null,4,1006899027,200.0),
+(null,5,1006899027,150.0),
 
-(1, 1006899237, 499.9),
-(2,1006899237,200.5),
-(4,1006899237,350.0),
-(5,1006899237,300),
+(null,1, 1006899237, 499.9),
+(null,2,1006899237,200.5),
+(null,3,1006899237,250.0),
+(null,4,1006899237,350.0),
+(null,5,1006899237,300.0),
 
-(1, 1030992840, 792.41),
-(2,1030992840,610.99),
-(4,1030992840,507.35),
-(5,1030992840,750.00),
+(null,1, 1030992840, 792.41),
+(null,2,1030992840,610.99),
+(null,3,1030992840,507.35),
+(null,4,1030992840,350.0),
+(null,5,1030992840,750.00),
 
-(1, 1030992910, 549.49),
-(2,1030992910,500.99),
-(4,1030992910,499.35),
-(5,1030992910,450.00),
+(null,1, 1030992910, 549.49),
+(null,2,1030992910,500.99),
+(null,3,1030992910,300.35),
+(null,4,1030992910,350.0),
+(null,5,1030992910,450.00),
 
-(1, 1032920984, 612.92),
-(2,1032920984,600.99),
-(4,1032920984,599.35),
-(5,1032920984,610.00),
+(null,1, 1032920984, 612.92),
+(null,2,1032920984,600.99),
+(null,3,1032920984,500.35),
+(null,4,1032920984,599.35),
+(null,5,1032920984,610.00);
 
-(1, 1036353270, 478.43),
-(2,1036353270,400.99),
-(4,1036353270,430.35),
-(5,1036353270,410.00);
 
---
--- Índices para tabelas despejadas
---
+ALTER TABLE `products_supermercados`
+ADD FOREIGN KEY (`id_supermercados`) REFERENCES supermercados(`id`);
 
---
--- Índices para tabela `products1`
---
-ALTER TABLE `products1`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `products_supermercados`
+ADD FOREIGN KEY (`id_Produtos`) REFERENCES products(`id`);
 
---
--- Índices para tabela `products2`
---
-ALTER TABLE `products2`
-  ADD PRIMARY KEY (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

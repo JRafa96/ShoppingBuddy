@@ -1,20 +1,20 @@
 CREATE TABLE `listas_produtos` (
-  `id_listasproduct` int(11),
+  `id_listasproduct` int(11) NOT NULL AUTO_INCREMENT,
   `id_lista` int(11) NOT NULL ,
   `id_products` bigint(20) NOT NULL,
-    `price` float(6,2) NOT NULL,
+  `quantidade` int(11) NOT NULL ,
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-  INSERT INTO `listas_produtos` (`id_listasproduct`,`id_lista`, `id_products`, `price`) VALUES
-(null,13, 1006899027, 680.74),
-(null,13, 1006899027,700.5),
-(null,13, 1006899027,200.0),
-(null,13, 1006899027,150.0),
+  INSERT INTO `listas_produtos` (`id_listasproduct`,`id_lista`, `id_products`) VALUES
+(null,13, 1006899027),
+(null,13, 1030992910),
+(null,13, 1030992840),
+(null,13, 1055028697),
 
-(null,6, 1006899237, 499.9),
-(null,6,1006899237,200.5),
-(null,6, 1006899237,350.0),
-(null,6,1006899237,300),
+(null,6, 1006899237),
+(null,6,1006899237),
+(null,6, 1006899237),
+(null,6,1006899237);
 
 (null, 1030992840, 792.41),
 (null,1030992840,610.99),
@@ -42,6 +42,5 @@ ALTER TABLE `listas_produtos`
 ALTER TABLE `listas_produtos`
 ADD FOREIGN KEY (`id_lista`) REFERENCES listas(`id_lista`);
 
-ALTER TABLE `listas_produtos`
-MODIFY `id_listasproduct` int(11) AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 COMMIT;

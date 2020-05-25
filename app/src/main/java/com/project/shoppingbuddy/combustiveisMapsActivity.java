@@ -157,11 +157,4 @@ public class combustiveisMapsActivity extends AppCompatActivity {
                 });
 
     }
-
-
-
-
-
-
-
 }

@@ -3,8 +3,9 @@ package com.project.shoppingbuddy.Classes;
 public class Supermercado {
     private int id;
     private String name;
-
     private String preço;
+    private double latitude;
+    private double longitude;
 
     public int getId() {
         return id;
@@ -30,9 +31,27 @@ public class Supermercado {
         this.preço = preço;
     }
 
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
     public Supermercado(String name, String preço) {
         this.name = name;
         this.preço = preço;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public Supermercado() {

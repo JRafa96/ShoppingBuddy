@@ -14,8 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".combustiveisMapsActivity"></activity>
-        <activity android:name=".listaComprasGActivity"></activity>
+        <activity android:name=".ComparacoesActivity"></activity>
+        <activity android:name=".combustiveisMapsActivity" />
+        <activity android:name=".listaComprasGActivity" />
         <activity android:name=".ListasActivity" />
         <activity android:name=".ListaComprasActivity" />
 

@@ -1,5 +1,5 @@
 CREATE TABLE `listas` (
-  `id_lista` int(11) ,
+  `id_lista` int(11) NOT NULL AUTO_INCREMENT,
   `id_user` int(11) NOT NULL,
   `nome_lista` varchar(255) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -30,9 +30,6 @@ ALTER TABLE `listas`
 ALTER TABLE `listas`
 ADD FOREIGN KEY (`id_user`) REFERENCES users(`id`);
 
-
-ALTER TABLE `listas`
-  MODIFY `id_lista` int(11) NOT NULL AUTO_INCREMENT;
 
 
 COMMIT;

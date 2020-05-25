@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".listaComprasGActivity">
+    tools:context=".listaComprasGActivity"
+    android:background="@drawable/backgroud_grad">
 
     <LinearLayout
         android:layout_width="409dp"
@@ -16,10 +17,12 @@
         <TextView
             android:id="@+id/textView9"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:text="As suas Listas de compras"
             android:textAlignment="center"
-            android:textSize="30dp" />
+            android:textColor="#000"
+            android:textSize="30sp"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,14 +33,58 @@
                 android:id="@+id/spLista"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autofillHints="Selecione uma lista"/>
+                android:autofillHints="Selecione uma lista"
+                android:background="@android:drawable/btn_dropdown"/>
 
             <Button
                 android:id="@+id/btnCriarLista"
-                android:layout_width="wrap_content"
+                android:layout_width="113dp"
                 android:layout_height="wrap_content"
-                android:text="Criar Lista"
-                android:onClick="criarLista"/>
+                android:background="@drawable/btn_shape"
+                android:onClick="criarLista"
+                android:text="Criar Lista" />
+        </LinearLayout>
+
+        <AutoCompleteTextView
+            android:id="@+id/autoProdutos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Adicione um produto"/>
+
+        <EditText
+            android:id="@+id/edQuantidade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Quantidade" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#CFCFCF"
+            android:textStyle="bold"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_weight="2"
+                android:text="Produtos"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:text="Quantidades"
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -53,23 +100,27 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/btnAdicionar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+" />
+                android:text="Adicionar Produto" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/btnAddLista"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-" />
+
+                android:text="Adicionar à lista" />
+
         </LinearLayout>
 
         <Button
             android:id="@+id/btnComparar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Comparar" />
+            android:text="Comparar"
+            android:onClick="comparacoes"
+            android:background="@drawable/btn_shape"/>
 
     </LinearLayout>
 

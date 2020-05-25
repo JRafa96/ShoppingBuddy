@@ -15,7 +15,7 @@ if (isset($_POST['id_lista'])) {
     $id = $_POST['id_lista'];
 
 
-$stmt = $con->prepare("SELECT id_products, price FROM listas_produtos WHERE id_lista = :id");
+$stmt = $con->prepare("SELECT id_products, quantidade FROM listas_produtos WHERE id_lista = :id");
 $stmt->bindParam("id", $id);
 $stmt->execute();
 $listas_products = array();
@@ -28,7 +28,7 @@ while($row = $stmt->fetch())
   $temp = array();
     $temp['id_product'] = $row['id_products'];
     $temp['nome'] = $stmt2Res[0];
-    $temp['price'] = $row['price'];
+    $temp['quantidade'] = $row['quantidade'];
 
     array_push($listas_products, $temp);
 }

@@ -15,7 +15,7 @@ if (isset($_POST['id_lista'])) {
     $id = $_POST['id_lista'];
 
 
-    $stmt = $con->prepare("SELECT id_products FROM listas_produtos WHERE id_lista = :id");
+    $stmt = $con->prepare("SELECT id_products,quantidade FROM listas_produtos WHERE id_lista = :id");
     $stmt->bindParam(":id",$id);
     $stmt->execute();
     $resultado=$stmt->fetchAll();
@@ -42,15 +42,15 @@ if (isset($_POST['id_lista'])) {
       $stmt2Res = $stmt2->fetchAll();
       foreach ($stmt2Res as $Res) {
         if ($Res["id_Supermercados"] == 1 ) {
-          $somaSuper1+= $Res["price"];
+          $somaSuper1+= $Res["price"]*$row['quantidade'];
         } else if ($Res["id_Supermercados"] == 2 ) {
-          $somaSuper2+= $Res["price"];
+          $somaSuper2+= $Res["price"]*$row['quantidade'];
         }   if ($Res["id_Supermercados"] == 3 ) {
-          $somaSuper3+= $Res["price"];
+          $somaSuper3+= $Res["price"]*$row['quantidade'];
         } else  if ($Res["id_Supermercados"] == 4 ) {
-          $somaSuper4+= $Res["price"];
+          $somaSuper4+= $Res["price"]*$row['quantidade'];
         }else  if ($Res["id_Supermercados"] == 5 ) {
-          $somaSuper5+= $Res["price"];
+          $somaSuper5+= $Res["price"]*$row['quantidade'];
         }
       }
   }
@@ -63,7 +63,7 @@ if (isset($_POST['id_lista'])) {
     $distancia3= $stmt2Res[2]["latitude"].", ".$stmt2Res[2]["longitude"];
     $distancia4= $stmt2Res[3]["latitude"].", ".$stmt2Res[3]["longitude"];
     $distancia5= $stmt2Res[4]["latitude"].", ".$stmt2Res[4]["longitude"];
-    
+
    
 
     $temp = array();

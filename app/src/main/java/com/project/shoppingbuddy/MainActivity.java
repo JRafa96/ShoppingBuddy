@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.project.shoppingbuddy.Classes.SupermercadosProdutos;
 import com.project.shoppingbuddy.helper.SQLiteHandler;
 import com.project.shoppingbuddy.helper.SessionManager;
 
@@ -37,6 +38,7 @@ public class MainActivity extends Activity {
         btnLogout = (Button) findViewById(R.id.btnLogout);
         btnComb = findViewById(R.id.btnCombustiveis);
         btnList = findViewById(R.id.btnListaCompras);
+
 
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());

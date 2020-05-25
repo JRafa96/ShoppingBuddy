@@ -4,61 +4,103 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ListasActivity">
+    tools:context=".ListasActivity"
+    android:background="@drawable/backgroud_grad">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/textView7"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/sp1"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Crie a sua Lista"
-                android:textAlignment="center"
-                android:textSize="30dp" />
-
-        </LinearLayout>
+            android:layout_height="60dp"
+            android:text="Crie a sua Lista"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textSize="30dp" />
 
 
-
-    <EditText
-        android:id="@+id/edProduto"
+        <EditText
+        android:id="@+id/edNome_lista"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Insira um nome"
+        android:hint="Insira um nome da Lista"
         android:inputType="textPersonName"
         android:text="" />
 
-    <TextView
+        <TextView
         android:id="@+id/textView6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Produtos"
-        android:textSize="25dp" />
+            android:textColor="#000"
+            android:textSize="25dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="409dp"
-        android:layout_height="561dp">
+        <AutoCompleteTextView
+            android:id="@+id/autoProdutos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Insira um produto" />
+
+        <EditText
+            android:id="@+id/edQuantidade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Insira as quantidades que quer adicionar à lista"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#CFCFCF"
+            android:textStyle="bold"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_weight="2"
+                android:text="Produtos"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:text="Quantidades"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <Button
         android:id="@+id/btnAdicionar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Adicionar novo produto" />
+        android:layout_height="50dp"
+        android:text="Adicionar novo produto"
+        />
+
+        <Button
+            android:id="@+id/btnAddLista"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Adicionar lista" />
+
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
